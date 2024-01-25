@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "shot-processor"
+version = "0.1.0"
+description = ""
+authors = ["arnoudx6 <arnoud.stolk@ziggo.nl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+argparse = "^1.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
