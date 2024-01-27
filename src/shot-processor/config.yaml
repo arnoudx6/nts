@@ -1,0 +1,5 @@
+# Message broker settings
+broker_host: ""
+broker_port: ""
+broker_username: ""
+broker_password: ""

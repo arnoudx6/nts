@@ -1,9 +1,10 @@
 """This is the """
 
 # Built-in imports
-from argparse import ArgumentParser
 
 # Common imports
+import configargparse
+import yaml
 
 # App imports
 
@@ -24,16 +25,70 @@ def cli() -> None:
     :return:
     """
 
-    argument_parser = ArgumentParser()
-    argument_parser.prog = "app"
-    argument_parser.description = "Processes incoming shot from the target"
-    argument_parser.epilog = "For more documentation visit the NTS Github"
-    argument_parser.add_argument(
-        "-c", "--config", action="store", required=True, help="The config filepath"
-    )
-    argument_parser.add_argument("-v", "--verbose", action="store_true")
+    # Set up an argument parser that parses command-line arguments
+    # ConfigArgeParse docs: https://pypi.org/project/ConfigArgParse/
 
-    arguments = argument_parser.parse_args()
+    # Create a parser instance and configure the config type as yaml
+    config_parser = configargparse.ArgParser()
+    config_parser.config_file_parser_class = configargparse.YAMLConfigFileParser
+
+    # Configure the app help documentation
+    config_parser.prog = "app"
+    config_parser.description = "Processes incoming shot from the target"
+    config_parser.epilog = "For more documentation visit the NTS Github"
+
+    # Config file path
+    config_parser.add_argument(
+        "-c",
+        "--config",
+        required=True,
+        is_config_file=True,
+        help="The config file path",
+    )
+
+    # Broker hostname
+    config_parser.add_argument(
+        "-bhost",
+        "--broker_host",
+        required=True,
+        action="store",
+        type=str,
+        help="The hostname or dns-name of the broker service",
+    )
+
+    # Broker hostname
+    config_parser.add_argument(
+        "-bport",
+        "--broker_port",
+        required=True,
+        action="store",
+        type=int,
+        help="The port number of the broker service",
+    )
+
+    # Broker username
+    config_parser.add_argument(
+        "-buser",
+        "--broker_username",
+        required=True,
+        action="store",
+        type=str,
+        help="The port number of the broker service",
+    )
+
+    # Broker password
+    config_parser.add_argument(
+        "-bpwd",
+        "--broker_username",
+        required=True,
+        action="store",
+        type=str,
+        help="The port number of the broker service",
+    )
+
+    # Retrieve command-line arguments
+    arguments = config_parser.parse_known_args()[0]
+    print(arguments)
 
     main()
 
