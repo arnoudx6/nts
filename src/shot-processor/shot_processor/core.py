@@ -1,5 +1,9 @@
+# Built-in imports
 import time
 
+# Common imports
+
+# App imports
 from nts import api
 from nts import broker
 

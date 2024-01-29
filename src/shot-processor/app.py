@@ -3,21 +3,27 @@
 # Built-in imports
 
 # Common imports
-import configargparse  # type: ignore
 
 # App imports
 from shot_processor import core
+from shot_processor import arguments
 from nts import api
 from nts import broker
 
 
 def main(
+    config_filepath: str,
     launch_arguments,
 ) -> None:
     """The main function of the app
 
-    :return:
+    Args:
+        config_filepath(str): The filepath for the YAML configuration file.
+        launch_arguments:
+    Returns:
+        None
     """
+
     config: str = ""
 
     # Create an object with broker connection details
@@ -35,125 +41,31 @@ def main(
         key=launch_arguments.api_key,
     )
 
-    runner = core.Runner(config, nts_api, nts_broker)
+    # Create a new runner instance
+    runner = core.Runner(config=config, nts_api=nts_api, nts_broker=nts_broker)
+
+    # Start the runner
     runner.start()
 
 
-def cli() -> None:
+def launch() -> None:
     """The app entrypoint
 
     This function handles the start of the application. Mostly arguments parsing.
 
-    :return:
+    Args:
+
+    Returns:
+        None
     """
 
-    # Set up an argument parser that parses command-line arguments
-    # ConfigArgeParse docs: https://pypi.org/project/ConfigArgParse/
+    # Parse the launch arguments from the configfile, env variables and cli arguments
+    launch_arguments: tuple = arguments.parse()
 
-    # Create a parser instance and configure the config type as yaml
-    config_parser = configargparse.ArgParser()
-    config_parser.config_file_parser_class = configargparse.YAMLConfigFileParser
-
-    # Configure the app help documentation
-    config_parser.prog = "app"
-    config_parser.description = "Processes incoming shot from the target"
-    config_parser.epilog = "For more documentation visit the NTS Github"
-
-    # Config file path
-    config_parser.add_argument(
-        "-c",
-        "--config",
-        required=True,
-        is_config_file=True,
-        help="The config file path",
-    )
-
-    # Create an argument group for the message broker configuration
-    broker_config_group = config_parser.add_argument_group(
-        title="Message broker settings"
-    )
-
-    # Broker hostname
-    broker_config_group.add_argument(
-        "-bhost",
-        "--broker_host",
-        required=False,
-        action="store",
-        type=str,
-        help="The hostname or dns-name of the broker service",
-    )
-
-    # Broker port
-    broker_config_group.add_argument(
-        "-bport",
-        "--broker_port",
-        required=True,
-        action="store",
-        type=int,
-        help="The port number of the broker service",
-    )
-
-    # Broker username
-    broker_config_group.add_argument(
-        "-buser",
-        "--broker_username",
-        required=True,
-        action="store",
-        type=str,
-        help="The username for the broker service",
-    )
-
-    # Broker password
-    broker_config_group.add_argument(
-        "-bpwd",
-        "--broker_password",
-        required=True,
-        action="store",
-        type=str,
-        help="The password for the broker service",
-    )
-
-    # Create an argument group for the message broker configuration
-    api_config_group = config_parser.add_argument_group(title="API settings")
-
-    # API hostname
-    api_config_group.add_argument(
-        "-ahost",
-        "--api_host",
-        required=True,
-        action="store",
-        type=str,
-        help="The hostname or dns-name of the API",
-    )
-
-    # API port
-    api_config_group.add_argument(
-        "-aport",
-        "--api_port",
-        required=True,
-        action="store",
-        type=int,
-        help="The port number of the API",
-    )
-
-    # API key
-    api_config_group.add_argument(
-        "-akey",
-        "--api_key",
-        required=True,
-        action="store",
-        type=str,
-        help="The key for the API",
-    )
-
-    # Retrieve command-line arguments
-    launch_arguments = config_parser.parse_known_args()[0]
-
-    # print(arguments[0])
-    main(launch_arguments)
+    main(config_filepath=launch_arguments.config, launch_arguments=launch_arguments)
 
 
 if __name__ == "__main__":
     # This is triggered when the app is started via Python instead of the app entrypoint.
     # Call the cli() function that is used ba
-    cli()
+    launch()
