@@ -3,18 +3,40 @@
 # Built-in imports
 
 # Common imports
-import configargparse
-import yaml
+import configargparse  # type: ignore
 
 # App imports
+from shot_processor import core
+from nts import api
+from nts import broker
 
 
-def main() -> None:
+def main(
+    launch_arguments,
+) -> None:
     """The main function of the app
 
     :return:
     """
-    print("Hello world")
+    config: str = ""
+
+    # Create an object with broker connection details
+    nts_broker = broker.Broker(
+        host=launch_arguments.broker_host,
+        port=launch_arguments.broker_port,
+        username=launch_arguments.broker_username,
+        password=launch_arguments.broker_password,
+    )
+
+    # Create an object with API connection details
+    nts_api = api.API(
+        host=launch_arguments.api_host,
+        port=launch_arguments.api_port,
+        key=launch_arguments.api_key,
+    )
+
+    runner = core.Runner(config, nts_api, nts_broker)
+    runner.start()
 
 
 def cli() -> None:
@@ -46,18 +68,23 @@ def cli() -> None:
         help="The config file path",
     )
 
+    # Create an argument group for the message broker configuration
+    broker_config_group = config_parser.add_argument_group(
+        title="Message broker settings"
+    )
+
     # Broker hostname
-    config_parser.add_argument(
+    broker_config_group.add_argument(
         "-bhost",
         "--broker_host",
-        required=True,
+        required=False,
         action="store",
         type=str,
         help="The hostname or dns-name of the broker service",
     )
 
-    # Broker hostname
-    config_parser.add_argument(
+    # Broker port
+    broker_config_group.add_argument(
         "-bport",
         "--broker_port",
         required=True,
@@ -67,30 +94,63 @@ def cli() -> None:
     )
 
     # Broker username
-    config_parser.add_argument(
+    broker_config_group.add_argument(
         "-buser",
         "--broker_username",
         required=True,
         action="store",
         type=str,
-        help="The port number of the broker service",
+        help="The username for the broker service",
     )
 
     # Broker password
-    config_parser.add_argument(
+    broker_config_group.add_argument(
         "-bpwd",
-        "--broker_username",
+        "--broker_password",
         required=True,
         action="store",
         type=str,
-        help="The port number of the broker service",
+        help="The password for the broker service",
+    )
+
+    # Create an argument group for the message broker configuration
+    api_config_group = config_parser.add_argument_group(title="API settings")
+
+    # API hostname
+    api_config_group.add_argument(
+        "-ahost",
+        "--api_host",
+        required=True,
+        action="store",
+        type=str,
+        help="The hostname or dns-name of the API",
+    )
+
+    # API port
+    api_config_group.add_argument(
+        "-aport",
+        "--api_port",
+        required=True,
+        action="store",
+        type=int,
+        help="The port number of the API",
+    )
+
+    # API key
+    api_config_group.add_argument(
+        "-akey",
+        "--api_key",
+        required=True,
+        action="store",
+        type=str,
+        help="The key for the API",
     )
 
     # Retrieve command-line arguments
-    arguments = config_parser.parse_known_args()[0]
-    print(arguments)
+    launch_arguments = config_parser.parse_known_args()[0]
 
-    main()
+    # print(arguments[0])
+    main(launch_arguments)
 
 
 if __name__ == "__main__":
