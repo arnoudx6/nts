@@ -2,7 +2,7 @@
 name = "shot-processor"
 version = "0.1.0"
 description = ""
-authors = ["arnoudx6"]
+authors = ["Arnoud Stolk"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
