@@ -1,4 +1,1 @@
-FROM ubuntu:latest
-LABEL authors="arnou"
-
-ENTRYPOINT ["top", "-b"]
+LABEL authors="Arnoud Stolk (Noud)"

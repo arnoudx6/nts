@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "message-processor"
+version = "0.1.0"
+description = ""
+authors = ["Arnoud Stolk (Noud)"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+configargparse = "^1.7"
+pyyaml = "^6.0.1"
+types-pyyaml = "^6.0.12.12"
+
+[tool.poetry.scripts]
+app = "app:launch"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
