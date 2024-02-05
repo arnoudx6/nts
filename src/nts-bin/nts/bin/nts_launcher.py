@@ -1,6 +1,7 @@
 """NTS Launcher"""
 
 # Built-in imports
+import importlib
 
 # Common imports
 
@@ -21,10 +22,14 @@ def main() -> None:
     """
 
     # Parse app arguments
-    utils.parse_app_arguments()
+    app_arguments: tuple = utils.parse_app_arguments()
+
+    # Retrieve the package to load from the app arguments
+    module: str = app_arguments.module
 
     # Import the package that contains the worker.
-    utils.import_package()
+    lib = importlib.import_module(name=module)
+    lib.worker()
 
 
 def cli() -> None:
@@ -38,6 +43,7 @@ def cli() -> None:
         None
     """
     print("hello world")
+    main()
 
 
 if __name__ == "__main__":
