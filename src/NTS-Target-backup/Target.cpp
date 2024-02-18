@@ -1,4 +1,4 @@
-#include "Target.h" //Include class header file
+#include "Target.h"  //Include class header file
 
 Target::Target() {
   //Using my own init function for this
@@ -7,24 +7,23 @@ Target::Target() {
 
 /************************Exposed class functions************************/
 
-void Target::init(uint8_t targetID, uint8_t targetSensorPin, uint8_t targetType, bool targetEnabled) {
+void Target::init(int id, int type, bool enabled, int sensorID, int sensorPin, int ledRingID, int ledRingLedCount) {
   //Set class variables
-  _id = targetID;
-  _sensorPin = targetSensorPin;
-  _type = targetType;
-  _enabled = targetEnabled;
+  _id = id;
+  _type = type;
+  _enabled = enabled;
 
   //Initialize the sensor
   _sensor = Sensor();
-  _sensor.init(_sensorPin);
+  _sensor.init(sensorID, sensorPin);
+
+  //Initialize the led ring
+  _ledRing = LedRing();
+  _ledRing.init(ledRingID, ledRingLedCount);
 }
 
-uint8_t Target::getID(){
+uint8_t Target::getID() {
   return _id;
-}
-
-uint8_t Target::getSensorPin(){
-  return _sensorPin;
 }
 
 uint8_t Target::getType() {

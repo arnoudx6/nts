@@ -12,16 +12,20 @@
 
 
 class LedRing {
-  public:
-    //Constructor variable
-    LedRing();
+public:
+  //Constructor variable
+  LedRing();
 
-    //Exposed class functions
-    void init(uint8_t numberOfLeds);
-  private:
-    //Private class variables
-    uint8_t _numberOfLeds;
+  //Exposed custom initialization function
+  void init(uint8_t id, uint8_t ledCount);  //Initializes the class instance
 
-    //Private class functions
+  //Exposed class functions
+
+private:
+  //Private class variables
+  uint8_t _id;        //The ID of the led ring
+  uint8_t _ledCount;  //The amount of LEDs in the led ring
+
+  //Private class functions
 };
 #endif

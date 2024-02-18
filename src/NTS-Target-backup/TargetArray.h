@@ -8,42 +8,35 @@
 //Common imports
 
 //Custom imports
-#include "Target.h"
-
-//Constants
-const uint8_t _numberOfTargetsInTargetArray = 5;
-
-
-//Configure the targets that are in the target array
-//The layout of the target array
-//  -------------------
-//  |  +  +  +  +  +  | Targets
-//  |  5  4  3  2  1  | IDs
-//  |  8  3  2  1  0  | The pins of the sensors
-//  -------------------
-//If ever changing this is in something else these are the constants that define the target array
-const uint8_t numberOfTargetsInArray = 5; //The number of targets in the array
-const int targetIDs[numberOfTargetsInArray] = {5,4,3,2,1}; //The IDs of the targets
-const int targetSensorPins[numberOfTargetsInArray] = {8,3,2,1,0}; //The digital pin numbers of the sensors in the targets
-const int targetTypes[numberOfTargetsInArray] = {1,1,1,1}; //Reserved for future use
-const bool targetsEnabled[numberOfTargetsInArray] = {false, false, false, true, true}; //The state of the target
-
+#include "TargetArrayDefinition.h"  //Import the array definition from a seperate file. This keeps this class file clean.
+#include "Target.h"                 //Contains the target definition
 
 class TargetArray {
-  public:
-    //Constructor function
-    TargetArray();
+public:
+  //Constructor function
+  TargetArray();
 
-    //Exposed class functions
-    void init();
+  //Exposed custom initialization function
+  void init(uint8_t id, uint8_t type, bool enabled);
 
-    //Public accessible variables
+  //Exposed class functions
+  uint8_t getID();    //Returns id of the target array
+  uint8_t getType();  //Returns the type of the target array
+  bool getEnabled();  //Returns the enabled state of the target array
 
-  private:
-    //Private class variables
-    Target _targets[_numberOfTargetsInTargetArray];
+  void setType(uint8_t);          //Sets the type of the target array
+  void setEnabled(bool enabled);  //Sets the enabled state of the target array
 
-    //Private class functions
-    void _initializeTargets();
+  //Public accessible variables
+
+private:
+  //Private class variables
+  uint8_t _id;    //The id of the target array
+  uint8_t _type;  //The type of the target array
+  bool _enabled;  //The enabled state of the target array
+
+  Target _targets[targetCount];  //An array containing all targets of the target array
+
+  //Private class functions
 };
 #endif

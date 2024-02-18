@@ -9,35 +9,35 @@
 
 //Custom imports
 #include "Sensor.h"
-#include "ledring.h"
+#include "LedRing.h"
 
 class Target {
-  public:
-    //Constructor function
-    Target();
-    //Exposed class functions
-    void init(uint8_t targetID, uint8_t targetSensorPin, uint8_t targetType, bool targetEnabled);
+public:
+  //Constructor function
+  Target();
 
-    bool getSensorState();
-    void setSensorState(bool state); //This activates/deactivates the Interrupt from the sensor
+  //Exposed custom initialization function
+  void init(int id, int type, bool enabled, int sensorID, int sensorPin, int ledRingID, int ledRingLedCount);  //Initializes the class instance
 
-    //Public accessible variables
-    uint8_t getID();
-    uint8_t getSensorPin();
-    uint8_t getType();
-    bool Enabled();
+  //Exposed class functions
+  bool getSensorState();
+  void setSensorState(bool state);  //This activates/deactivates the Interrupt from the sensor
 
-  private:
-    //Private class variables
-    uint8_t _id;
-    uint8_t _sensorPin;
-    uint8_t _type;
-    uint8_t _enabled;
+  //Public accessible variables
+  uint8_t getID();
+  uint8_t getSensorPin();
+  uint8_t getType();
+  bool Enabled();
 
-    Sensor _sensor;
-    //LedRing _ledRing;
+private:
+  //Private class variables
+  uint8_t _id;
+  uint8_t _type;
+  bool _enabled;
+  
+  Sensor _sensor;
+  LedRing _ledRing;
 
-    //Private class functions
-
+  //Private class functions
 };
 #endif
